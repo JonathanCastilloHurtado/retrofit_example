@@ -1,6 +1,6 @@
-package com.johncastle.retrofit_example;
+package com.johncastle.retrofit_example.Objetos;
 
-public class FormularioRequest {
+public class UserRequest {
    private String correo_electronico;
    private String psw;
 

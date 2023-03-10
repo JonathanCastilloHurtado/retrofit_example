@@ -12,46 +12,14 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    String URL_FORMULARIOS="http://www.johncastle.com.mx/apis/";
+    final String URL_BASE_FORMULARIOS="http://www.johncastle.com.mx/apis/";
+    final String URL_BASE_USUARIOS="http://www.johncastle.com.mx/apis/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        saveUser(createRequest());
-    }
-    public FormularioRequest createRequest(){
-        FormularioRequest formularioRequest = new FormularioRequest();
-        formularioRequest.setCorreo_electronico("johncastle@example.com");
-        formularioRequest.setPsw("123");
-
-        return formularioRequest;
+        ViewModel viewModel = new ViewModel(URL_BASE_USUARIOS);
+        viewModel.consumeUserAPI();
     }
 
-    public void saveUser(FormularioRequest formularioRequest) {
-        Call<FormularioResponse> userResponseCall = FormularioClient.getUserService(URL_FORMULARIOS).saveUser(formularioRequest);
-        userResponseCall.enqueue(new Callback<FormularioResponse>() {
-            @Override
-            public void onResponse(Call<FormularioResponse> call, Response<FormularioResponse> response) {
-             if(response.isSuccess()){
-                 if(response.body().getStatusCode()==200){
-                     Toast.makeText(MainActivity.this,response.body().getResults(),Toast.LENGTH_LONG).show();
-                 }
-                 else {
-                     Toast.makeText(MainActivity.this,response.body().getResults(),Toast.LENGTH_LONG).show();
-                 }
-
-                }
-             else{
-                 Toast.makeText(MainActivity.this,"Bad response",Toast.LENGTH_LONG).show();
-
-             }
-
-            }
-
-            @Override
-            public void onFailure(Call<FormularioResponse> call, Throwable t) {
-                Log.d("JOHN","NOKYYY");
-            }
-        });
-    }
 }

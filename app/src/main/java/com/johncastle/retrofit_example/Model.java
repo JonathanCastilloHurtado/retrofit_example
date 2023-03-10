@@ -5,9 +5,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FormularioClient {
+public class Model {
 
-    private static Retrofit getRetrofit(String urlBase) {
+    public static Retrofit getRetrofit(String urlBase) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -20,9 +20,8 @@ public class FormularioClient {
 
         return retrofit;
     }
-
-    public static FormularioEndpoint getUserService(String urlBase){
-      FormularioEndpoint formularioEndpoint = getRetrofit(urlBase).create(FormularioEndpoint.class);
-      return formularioEndpoint;
+    public static endpoints getFinalURL(String urlBase){
+        endpoints formularioEndpoint = Model.getRetrofit(urlBase).create(endpoints.class);
+        return formularioEndpoint;
     }
 }

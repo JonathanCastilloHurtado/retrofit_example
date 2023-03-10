@@ -1,6 +1,6 @@
-package com.johncastle.retrofit_example;
+package com.johncastle.retrofit_example.Objetos;
 
-public class FormularioResponse {
+public class UserResponse {
     int StatusCode;
     String StatusMessage;
     String Results;
