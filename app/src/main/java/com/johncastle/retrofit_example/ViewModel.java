@@ -3,8 +3,12 @@ package com.johncastle.retrofit_example;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.databinding.ObservableField;
+
 import com.johncastle.retrofit_example.Objetos.FormularioRequest;
 import com.johncastle.retrofit_example.Objetos.FormularioResponse;
+import com.johncastle.retrofit_example.Objetos.LoginRequest;
+import com.johncastle.retrofit_example.Objetos.LoginResponse;
 import com.johncastle.retrofit_example.Objetos.UserRequest;
 import com.johncastle.retrofit_example.Objetos.UserResponse;
 
@@ -33,6 +37,41 @@ public class ViewModel {
         return userRequest;
     }
 
+    public LoginRequest createLoginApp(){
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUser("ffffffffgghfnhnuj");
+        loginRequest.setPassword("1000042934534");
+        return loginRequest;
+    }
+
+    public void consumeLoginApp(){
+        LoginRequest loginRequest = createLoginApp();
+
+        Call<LoginResponse> loginResponseCall = Model.getFinalURL(URL_BASE).endpointLogin(loginRequest);
+
+        loginResponseCall.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccess()){
+                    if (response.code()==200){
+                        Log.d("RODRI"," "+response.body().getResults());
+                    }else {
+                        Log.d("RODRI2"," "+response.body().getResults());
+                    }
+                }else {
+                    Log.d("RODRI3","Consulta erronea en el servicio");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d("RODRI","onFailure");
+            }
+        });
+    }
+
+
+
     public void consumeFormularioAPI() {
         //Se crea el post
         FormularioRequest formularioRequest=createFormularioRequest();
@@ -46,7 +85,6 @@ public class ViewModel {
                 if(response.isSuccess()){
                     if(response.body().getStatusCode()==200){
                         Log.d("JOHN",response.body().getResults());
-                        response.set(response.body().getResults());
                     }
                     else {
                         Log.d("JOHN",response.body().getResults());                    }

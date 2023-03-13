@@ -2,6 +2,8 @@ package com.johncastle.retrofit_example;
 
 import com.johncastle.retrofit_example.Objetos.FormularioRequest;
 import com.johncastle.retrofit_example.Objetos.FormularioResponse;
+import com.johncastle.retrofit_example.Objetos.LoginRequest;
+import com.johncastle.retrofit_example.Objetos.LoginResponse;
 import com.johncastle.retrofit_example.Objetos.UserRequest;
 import com.johncastle.retrofit_example.Objetos.UserResponse;
 
@@ -17,4 +19,8 @@ public interface endpoints {
     //el objeto que recibe es el post que se mandara
     @POST("user_request.php/")
     Call<UserResponse> endpointUserRequest (@Body UserRequest userRequest);
+
+    //LoginApp
+    @POST("MesaDeValidaciones/AutenticarUsuarioAppComercial_RS")
+    Call<LoginResponse> endpointLogin (@Body LoginRequest loginRequest);
 }

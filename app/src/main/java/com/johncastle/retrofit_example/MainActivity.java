@@ -14,12 +14,13 @@ public class MainActivity extends AppCompatActivity {
 
     final String URL_BASE_FORMULARIOS="http://www.johncastle.com.mx/apis/";
     final String URL_BASE_USUARIOS="http://www.johncastle.com.mx/apis/";
+    final String URL_BASE_LOGINAPP="http://172.20.0.131:80/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ViewModel viewModel = new ViewModel(URL_BASE_USUARIOS);
-        viewModel.consumeUserAPI();
+        ViewModel viewModel = new ViewModel(URL_BASE_LOGINAPP);
+        viewModel.consumeLoginApp();
     }
 
 }
