@@ -1,84 +1,54 @@
 package com.johncastle.retrofit_example;
 
 import android.util.Log;
-import android.widget.TextView;
 
-import com.johncastle.retrofit_example.Objetos.FormularioRequest;
-import com.johncastle.retrofit_example.Objetos.FormularioResponse;
-import com.johncastle.retrofit_example.Objetos.UserRequest;
-import com.johncastle.retrofit_example.Objetos.UserResponse;
+import com.johncastle.retrofit_example.Objetos.LoginRequest;
+import com.johncastle.retrofit_example.Objetos.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ViewModel {
-    public ObservableField<String> response;
     String URL_BASE;
     ViewModel(String URL_BASE){
        this.URL_BASE=URL_BASE;
     }
 
-    public FormularioRequest createFormularioRequest(){
-        FormularioRequest formularioRequest = new FormularioRequest();
-        formularioRequest.setCorreo_electronico("johncastle@example.com");
-        formularioRequest.setPsw("123");
-        return formularioRequest;
+    public LoginRequest createLoginRequest(){
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsuario("johncastle@example.com");
+        loginRequest.setContrasena("123");
+        return loginRequest;
     }
 
-    public UserRequest createUserRequest(){
-        UserRequest userRequest = new UserRequest();
-        userRequest.setCorreo_electronico("johncastle@example.com");
-        userRequest.setPsw("123");
-        return userRequest;
-    }
-
-    public void consumeFormularioAPI() {
-        //Se crea el post
-        FormularioRequest formularioRequest=createFormularioRequest();
-
-        //se construye la url FINAL
-        Call<FormularioResponse> ResponseFormularioCall = Model.getFinalURL(URL_BASE).endpointFormulario(formularioRequest);
-
-        ResponseFormularioCall.enqueue(new Callback<FormularioResponse>() {
-            @Override
-            public void onResponse(Call<FormularioResponse> call, Response<FormularioResponse> response) {
-                if(response.isSuccess()){
-                    if(response.body().getStatusCode()==200){
-                        Log.d("JOHN",response.body().getResults());
-                        response.set(response.body().getResults());
-                    }
-                    else {
-                        Log.d("JOHN",response.body().getResults());                    }
-                }
-                else{
-                    Log.d("JOHN", "Bad response");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FormularioResponse> call, Throwable t) {
-                Log.d("JOHN","onFailure");
-            }
-        });
-    }
-
-
-    public void consumeUserAPI() {
+    public void consumeLoginAPI() {
 //POST
-        UserRequest userRequest=createUserRequest();
+        LoginRequest loginRequest=createLoginRequest();
         //URL base compuesto
-        Call<UserResponse> userResponseCall = Model.getFinalURL(URL_BASE).endpointUserRequest(userRequest);
+        Call<LoginResponse> loginResponseCall = Model.getFinalURL(URL_BASE).endpointLoginRequest(loginRequest);
 
-        userResponseCall.enqueue(new Callback<UserResponse>() {
+        loginResponseCall.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                //hay exito pero el ejecutarse retrofit
                 if(response.isSuccess()){
-                    if(response.body().getStatusCode()==200){
-                        Log.d("JOHN",response.body().getResults());
+                    //hay una respuesta de exito en el response del api
+                    if(response.body().getAutenticarUsuarioResponse().getCodigoResultado().equals("1")){
+                        String nombre=response.body().getProcessResponse().getNombre();
+                        String apellidoPaterno=response.body().getProcessResponse().getApellidoPaterno();
+                        String apellidoMaterno=response.body().getProcessResponse().getApellidoMaterno();
+                        String curp=response.body().getProcessResponse().getCurp();
+                        String nss=response.body().getProcessResponse().getNss();
+                        String numConsar=response.body().getProcessResponse().getNumConsar();
+                        String nomina=response.body().getProcessResponse().getNomina();
+
+                        Log.d("JOHN",nombre+" "+apellidoMaterno+" "+apellidoPaterno+" "+curp+" "+nss+" "+numConsar++" "+nomina);
                     }
-                    else {
-                        Log.d("JOHN",response.body().getResults());                    }
+                    else{
+                        Log.d("JOHN",response.body().getAutenticarUsuarioResponse().getMessage());
+                    }
+
                 }
                 else{
                     Log.d("JOHN", "Bad response");
@@ -86,7 +56,7 @@ public class ViewModel {
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.d("JOHN","onFailure");
             }
         });
